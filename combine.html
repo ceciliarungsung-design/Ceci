@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hearts + Pink Envelope</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: black;
+    font-family: Arial, sans-serif;
+}
+
+/* Canvas background */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* Envelope */
+.envelope {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: 400px;
+    height: 250px;
+    background: #ffe4ec; /* soft pastel pink */
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    padding: 20px;
+}
+
+/* Content */
+.content {
+    text-align: center;
+    margin-top: 25px;
+    color: #5a3a3a;
+}
+
+.content h2 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.content p {
+    font-size: 14px;
+    color: #7a5a5a;
+}
+
+/* Flowers */
+.flower {
+    position: absolute;
+    width: 70px;
+}
+
+.top-left {
+    top: 10px;
+    left: 10px;
+}
+
+.bottom-right {
+    bottom: 10px;
+    right: 10px;
+    transform: rotate(180deg);
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<!-- 🌸 Envelope -->
+<div class="envelope">
+
+    <div class="content">
+   <h1>  </h1>
+        <p>Umm… where do I even begin…
+ okay yes you know I truly wish you all the best in everything you do. I hope things fall into place just the way you want them to and that your days ahead are filled with happiness, success and good health. And of course, all the very best for your upcoming exams too, I know you’ll do amazing.
+
+This just a small virtual thing for now. As for something real, I’ll make sure to treat you to something nice after your exams… and there’s really no option to say no. If you do, I might just show up at your place (lol, just kidding…. or maybe not who knows👀).
+
+For now, focus on your studies, study well, revise properly and don’t forget to take care of yourself and get enough rest, alright?
+
+Once again, wishing you the happiest birthday…
+Love you ...❤️</p>
+    </div>
+
+</div>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+// Heart class
+class Heart {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + Math.random() * 200;
+        this.size = Math.random() * 20 + 10;
+        this.speed = Math.random() * 1.5 + 0.5;
+        this.alpha = Math.random() * 0.5 + 0.5;
+    }
+
+    draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.scale(this.size / 30, this.size / 30);
+        ctx.globalAlpha = this.alpha;
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(0, -10, -15, -10, -15, 0);
+        ctx.bezierCurveTo(-15, 15, 0, 20, 0, 30);
+        ctx.bezierCurveTo(0, 20, 15, 15, 15, 0);
+        ctx.bezierCurveTo(15, -10, 0, -10, 0, 0);
+        ctx.fillStyle = "pink";
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    update() {
+        this.y -= this.speed;
+        if (this.y < -50) {
+            this.y = canvas.height + 50;
+            this.x = Math.random() * canvas.width;
+        }
+    }
+}
+
+const hearts = [];
+for (let i = 0; i < 80; i++) {
+    hearts.push(new Heart());
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    hearts.forEach(h => {
+        h.update();
+        h.draw();
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</body>
+</html>
